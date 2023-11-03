@@ -9,7 +9,6 @@ function startTime() {
   const formattedHours = checkTime(convertedHours);
   const formattedMinutes = checkTime(minutes);
   const formattedSeconds = checkTime(seconds);
-  const formatterdMiliSeconds = checkTime(miliSecond);
 
   const clockDisplayer = document.getElementById("clock");
   clockDisplayer.innerHTML = `${formattedHours}:${formattedMinutes}:${formattedSeconds} ${whichTime}`;
@@ -36,8 +35,31 @@ startTime();
 
 const inputActivy = document.getElementById("task");
 const submitActivy = document.getElementById("submit");
+const listActivity = document.getElementById("list-wrapper");
+const getError = document.getElementById("erorr");
+
+function saveActivities(activity) {
+  let activities = [];
+  const savedActivities = localStorage.getItem("activities");
+  if (savedActivities) {
+    activities = JSON.parse(savedActivities);
+  }
+  activities.push(activity);
+  localStorage.setItem("activities", JSON.stringify(activities));
+}
 
 submitActivy.addEventListener("click", function () {
   const inputValue = inputActivy.value;
-  console.log("nilai input:", inputValue);
+  if (inputValue) {
+    const list = document.createElement("li");
+    list.textContent = inputValue;
+    listActivity.appendChild(list);
+    saveActivities(inputValue);
+    inputActivy.value = "";
+  } else {
+    getError.textContent = "Please input your activities!";
+    setTimeout(function () {
+      getError.textContent = "";
+    }, 1000);
+  }
 });
